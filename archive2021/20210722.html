@@ -33,20 +33,19 @@ Chrome 91 deprecates this ability. Removing support for cross origin iframes’ 
 A different origin subframe tried to create a JavaScript dialog. This is no longer allowed and was blocked. See https://www.chromestatus.com/feature/5148698084376576 for more details.
 </pre>
 
-  <p>勇者屠龍後，勇者即是龍！</p>
-
   <h3>解決辦法</h3>
 
   <p>改啦！哪次不改？詳見：<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-sandbox" target="_blank">MDN Sandbox</a>，只是一旦揭露了sandbox屬性瀏覽器就會重設所有的原本的安全性預設，原本預設By瀏覽器自己的解釋沒人說得準（君不見文章中描述的改版新規範即是案例），沒好好測試就會落入改Ａ錯Ｂ的窘境。</p>
 
 <pre>
-/* 設下去與主框架非同源的XMLHttpRequest會被CORS政策擋下來
- * 然後你一定會想說再添加allow-same-origin就好啦？
- * 加下去後allow-scripts allow-modals又爆炸嘍～啾咪！（以Chrome 92為例）*/
+/* 設下去與主框架非同源的XMLHttpRequest會被CORS政策擋下來，然後你一定會想說再添加allow-same-origin就好啦？
+ * 沒錯，但（以Chrome 92為例）加下去後allow-scripts allow-modals又爆炸嘍！魚與熊掌不可兼得勒，啾咪～*/
 sandbox="allow-scripts allow-modals"
 </pre>
 
- <small>Chrome Chromium iFrame Javascript Dialog alert() confirm() prompt() print() Error Disable Blocked</small>
+  <p>勇者屠龍後，勇者即是龍！</p>
+
+  <small>Chrome Chromium iFrame Javascript Dialog alert() confirm() prompt() print() Error Disable Blocked</small>
 
 </body>
 </html>
