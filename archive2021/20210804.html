@@ -6,7 +6,7 @@
 </head>
 <body>
 
-  <h1>SQL筆記：SUBSTRING之錯誤訊息誤導</h1>
+  <h1>SQL筆記：SUBSTRING之錯誤訊息誤導？（其實是自己誤解）</h1>
 
   <p>今早某隻程式突然報錯，錯誤是來自SQL的標準錯誤訊息「將 nvarchar 值 'XX' 轉換成資料類型 int 時，轉換失敗。」，顯而易見的就是可能發生轉型時的失敗，經過追查後才發現案情並不單純，因此將這個問題記錄在此供給日後參考。</p>
 
@@ -46,10 +46,16 @@ iSN cCode     bState
 
   <p>經過東翻西找後，確定並不是語法問題而是在SQL自己本身查詢的機制，以下是TestView的產生指令，從指令中可以發現是以JOIN的方式來生成：</p>
 <pre class="sql">
-SELECT dbo.TestTable.iSN, dbo.TestTable.cCode, dbo.TestState.bState
-FROM dbo.TestTable INNER JOIN
-    dbo.TestState ON dbo.TestTable.iSN = dbo.TestState.iSN
-WHERE (dbo.TestState.bState = 1)
+SELECT
+  dbo.TestTable.iSN, dbo.TestTable.cCode, dbo.TestState.bState
+FROM
+  dbo.TestTable
+  INNER JOIN
+    dbo.TestState
+    ON
+    dbo.TestTable.iSN = dbo.TestState.iSN
+WHERE
+  dbo.TestState.bState = 1
 </pre>
   <img src="/image/2021/20210804_01.jpg" />
 
