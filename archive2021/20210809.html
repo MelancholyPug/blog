@@ -12,6 +12,24 @@
 
   <p>不囉嗦，直接上程式碼（Console介面），裡面包括採用LINQ的Order By GUID以及一個從網路上Copy過來的FisherYates演算法，然後我們跑一下看看倒底是誰「亂的比較平均」。</p>
 
+  <p>Fisher-Yates演算法獨立成一個方法：</p>
+<pre class="csharp">
+static string[] FisherYates(string[] oData)
+{
+  var oRnd = new System.Random();
+  int iLength = oData.Length;
+  for (int i = 0; i < (iLength - 1); i++)
+  {
+    int r = i + oRnd.Next(iLength - i);
+    string Temp = oData[r];
+    oData[r] = oData[i];
+    oData[i] = Temp;
+  }
+  return oData;
+}
+</pre>
+
+  <p>LINQ-GUID亂數程式碼與調用Fisher-Yates演算法，我都把他寫在main裡面：</p>
 <pre class="csharp">
 static void Main(string[] args)
 {
@@ -46,22 +64,7 @@ static void Main(string[] args)
 }
 </pre>
 
-  <p>Fisher-Yates演算法我獨立成一個方法：</p>
-<pre class="csharp">
-static string[] FisherYates(string[] oData)
-{
-  var oRnd = new System.Random();
-  int iLength = oData.Length;
-  for (int i = 0; i < (iLength - 1); i++)
-  {
-    int r = i + oRnd.Next(iLength - i);
-    string Temp = oData[r];
-    oData[r] = oData[i];
-    oData[i] = Temp;
-  }
-  return oData;
-}
-</pre>
+
 
   <h3>結論：GUID 更好更快</h3>
   <p>總共跑了1000萬次後進行統計，數據如下：</p>
