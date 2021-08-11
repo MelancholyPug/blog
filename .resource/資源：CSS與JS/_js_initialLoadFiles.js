@@ -4,6 +4,7 @@ var LoadFile = function(cType, cUrl, fCallBack) {
   if (cType === "js") {
 		oDom = document.createElement("script");
 		oDom.setAttribute("src", cUrl);
+		oDom.setAttribute("crossorigin", "anonymous")
 		//特別針對jQuery進行確定載入處理
 		if(cUrl.indexOf("jquery.min.js") !== -1){
 			if(oDom.readyState){

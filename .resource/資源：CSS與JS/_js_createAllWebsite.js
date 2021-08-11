@@ -150,7 +150,7 @@ jQueryIsReady(function () {
       });
 
       /* ***** Insert Middel Advertisment ***** */
-      LoadFile("js", "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js");
+      LoadFile("js", "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7039045520564660");
       $("#main-contents").find("p:eq(0)").after("<div id='AdvertismentMiddle' class='row'><div id='MiddleBlock1' class='col-xs-12 col-md-6'></div><div id='MiddleBlock2' class='col-xs-12 col-md-6'></div></div>");
       //Google
       setTimeout(function () {
