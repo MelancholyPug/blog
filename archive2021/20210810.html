@@ -38,13 +38,13 @@ $.each(oList, function (key, value) {
   <h3>不想被自動排序怎麼辦？</h3>
   <p>首先要先了解這樣的原因，是因為瀏覽器對於enumeration都有自己的一套索引方式，你沒有辦法去更改這樣的設定，所以並不是jQuery each假敖，而是瀏覽器一開始讀入Javascript的集合物件時就幫你在記憶體裡面定義好索引樹。</p>
 
-  <p>而剛好上面的oList物件又採用了非常方便排序的鍵值（key），也就是純天然的整數，因此就落入可被快速索引的演算之中了，若針對上述的問題解決方式也很好笑，就是把鍵值加入一些莫名其妙的文字即可，例如："xxx_1", "xxx_2" ...，你就會發現瀏覽器不幫你排序了。</p>
+  <p>而剛好上面的oList物件又採用了非常方便排序的整數鍵值（key），因此馬上就落入可被快速索引的演算之中了，若針對上述的問題解決方式也很好笑，就是把鍵值加入一些莫名其妙的字串即可，例如："xxx_1", "xxx_2" ...，你就會發現瀏覽器不幫你排序了。</p>
 
-  <p>但有時候這些鍵值對系統來說又是必要性的參數，你也不想再撰寫一些額外清洗鍵值的程式碼，這時候就要改用下列方式。</p>
+  <p>但有時候這些鍵值對系統來說又是必要性的參數，而我們也不想再撰寫一些額外清洗鍵值的程式碼，這時候就要改用下列方式。</p>
 
   <h3>陣列，是古老的陣列啊！</h3>
   <p>改寫一下資料表示成陣列的方式：</p>
-<pre class="javascript">
+  <pre class="javascript">
 var oList = [
   ["5", "55555"],
   ["3", "33333"],
@@ -53,8 +53,8 @@ var oList = [
   ["2", "22222"],
 ];
 //因為已經變成二維陣列，取出的意義已經不相同，故顯示值的方式也有所不同
-$.each(oList, function (oItem, oSubArray) {
-  console.log("ArrayIndex:" + oItem + " | Key:" + oSubArray[0] + "; Value:" + oSubArray[1]);
+$.each(oList, function (aryIndex, arySub) {
+  console.log("ArrayIndex:" + aryIndex + " | Key:" + arySub[0] + "; Value:" + arySub[1]);
 });
 </pre>
 
