@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<script src="/_resource/js/_js_initialLoadFiles.min.js"></script>
+</head>
+<body>
+
+  <h1>Request.ServerVariables抓不到自定義的Http Header鍵值？</h1>
+
+  <p>ASP.NET寫那麼久了，偶爾還是會有新鮮事發生，這件事情發生在確定傳過來的HTTP連線中，很肯定的有傳入一個名為「X_CustomizeName」的Header，然後怪事就發生了...</p>
+
+  <h3>Request.ServerVariables抓不到自定義Header</h3>
+  <p>其實ASP.NET要讀取傳入的HTTP Header有很多種方法，偏偏在這支程式中我是採用Request.ServerVariables來擷取值如下：</p>
+<pre class="csharp">
+string cHeader = System.Web.HttpContext.Current.Request.ServerVariables["X_CustomizeName"] as string;
+</pre>
+
+  <p>然而，這樣寫卻發生了永遠擷取不到值的窘境。因為，除了IIS認知的Header Key（IIS Server Variables）之外，ASP.NET全部會幫你添加一個名為「HTTP_」的前贅詞（prefixed）啊！只能怪自己年少輕狂不看文件...如今報應來了！就這樣在這個ASP時代就存在的老方法中栽了。</p>
+
+  <h3>文件證明</h3>
+  <ol>
+    <li>MSDN說明：<a href="https://docs.microsoft.com/en-us/previous-versions/iis/6.0-sdk/ms525396(v=vs.90)?redirectedfrom=MSDN#remarks" target="_blank">Request.ServerVariables Collection</a></li>
+    <li>原始碼：<a href="https://referencesource.microsoft.com/#System.Web/HttpRequest.cs,448" target="_blank">ServerVariableNameFromHeader</a></li>
+  </ol>
+
+  <h3>抓自定義Header正確的寫法</h3>
+  <p>只要在你要擷取的KEY前面添加「HTTP_」字串即可。（幹！）</p>
+<pre class="csharp">
+string cHeader = System.Web.HttpContext.Current.Request.ServerVariables["HTTP_X_CustomizeName"] as string;
+</pre>
+
+  <h3>其他擷取自定義HTTP Header的寫法</h3>
+
+  <p>一個專業的程式設計師，應該很討厭這種天外飛來一MagicString形式的寫法才對，天曉得半年後你再看程式碼怎麼可能會回憶起「HTTP_」是三小？</p>
+
+  <h4>Headers Index寫法</h4>
+  <p>可以改用下列寫法：</p>
+<pre class="csharp">
+//有找到會回傳字串（或多筆逗號分隔字串），沒找到會回傳null
+string cHeader = System.Web.HttpContext.Current.Request.Headers["X_CustomizeName"] as string;
+</pre>
+
+  <p>這個寫法基本上沒啥太大的問題，但有一點要注意的是因為NameValueCollection允許鍵值重複，所以你帶入一個認知中的單一鍵值（Key）有可能會回傳多重值（Value），舉例來說：</p>
+<pre class="csharp">
+var oNC = new System.Collections.Specialized.NameValueCollection();
+oNC.Add("A", "小明");
+oNC.Add("A", "小華"); //鍵值重複
+oNC.Add("B", "小英");
+Console.WriteLine(oNC["A"]);
+</pre>
+
+  <p>上面這段程式在ToString時期會丟出「小明,小華」，而這可能不會是你想要的（或許也可能就是你要的）。</p>
+
+  <h4>Headers GetValues寫法</h4>
+  <p>下列這種寫法會更精準的汲取一筆</p>
+<pre class="csharp">
+//有找到會回傳字串（或第一筆字串），沒找到會回傳NotFound（或你比較喜歡null也可以改回）
+string cHeader = 
+  System.Web.HttpContext.Current.Request.Headers.GetValues(Ksu.Site.HttpHeaderKey.IpAddressDefault.ToExtensionString())?.FirstOrDefault()
+  ??
+  "NotFound";
+</pre>
+
+  <small>ASP.NET GetCustomizeHttpHeader CanNotFoundHeader HeaderLost Request.ServerVariables IisServerVariables HttpHeader KeyPrefixed</small>
+
+</body>
+</html>
