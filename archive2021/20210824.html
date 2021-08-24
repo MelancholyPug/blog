@@ -27,7 +27,8 @@ string cHeader = System.Web.HttpContext.Current.Request.ServerVariables["X_Custo
   <h3>抓自定義Header正確的寫法</h3>
   <p>只要在你要擷取的KEY前面添加「HTTP_」字串即可。（幹！）</p>
 <pre class="csharp">
-string cHeader = System.Web.HttpContext.Current.Request.ServerVariables["HTTP_X_CustomizeName"] as string;
+string cHeader =
+  System.Web.HttpContext.Current.Request.ServerVariables["HTTP_X_CustomizeName"] as string;
 </pre>
 
   <h3>其他擷取自定義HTTP Header的寫法</h3>
@@ -38,15 +39,17 @@ string cHeader = System.Web.HttpContext.Current.Request.ServerVariables["HTTP_X_
   <p>可以改用下列寫法：</p>
 <pre class="csharp">
 //有找到會回傳字串（或多筆逗號分隔字串），沒找到會回傳null
-string cHeader = System.Web.HttpContext.Current.Request.Headers["X_CustomizeName"] as string;
+string cHeader =
+  System.Web.HttpContext.Current.Request.Headers["X_CustomizeName"] as string;
 </pre>
 
   <p>這個寫法基本上沒啥太大的問題，但有一點要注意的是因為NameValueCollection允許鍵值重複，所以你帶入一個認知中的單一鍵值（Key）有可能會回傳多重值（Value），舉例來說：</p>
 <pre class="csharp">
-var oNC = new System.Collections.Specialized.NameValueCollection();
-oNC.Add("A", "小明");
-oNC.Add("A", "小華"); //鍵值重複
-oNC.Add("B", "小英");
+var oNC = new System.Collections.Specialized.NameValueCollection() {
+  {"A", "小明"},
+  {"A", "小華"},  //鍵值重複
+  {"B", "小英"},
+};
 Console.WriteLine(oNC["A"]);
 </pre>
 
