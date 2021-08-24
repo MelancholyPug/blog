@@ -13,7 +13,8 @@
   <h3>Request.ServerVariables抓不到自定義Header</h3>
   <p>其實ASP.NET要讀取傳入的HTTP Header有很多種方法，偏偏在這支程式中我是採用Request.ServerVariables來擷取值如下：</p>
 <pre class="csharp">
-string cHeader = System.Web.HttpContext.Current.Request.ServerVariables["X_CustomizeName"] as string;
+string cHeader =
+  System.Web.HttpContext.Current.Request.ServerVariables["X_CustomizeName"] as string;
 </pre>
 
   <p>然而，這樣寫卻發生了永遠擷取不到值的窘境。因為，除了IIS認知的Header Key（IIS Server Variables）之外，ASP.NET全部會幫你添加一個名為「HTTP_」的前贅詞（prefixed）啊！只能怪自己年少輕狂不看文件...如今報應來了！就這樣在這個ASP時代就存在的老方法中栽了。</p>
